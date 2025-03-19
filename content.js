@@ -9,6 +9,9 @@
 (function () {
   "use strict";
 
+  // If user is not logged in, do not load menu item
+  if (!document.body.getAttributeNode('class').value.includes("logged-in")) {return}
+
   var films;
   var numberOfFilms;
 
