@@ -1,7 +1,16 @@
+/*----------------------------------------------------------------*\
+  Author: Haraldo Filho
+  Date: Mar 19, 2025
+  Project name: One Service Filter for Letterboxd
+  Description: Filter to show, in a Letterboxd list or watchlist,
+    only the films available on the selected streaming service.
+\*----------------------------------------------------------------*/
+
 (function () {
   "use strict";
 
   var films;
+  var numberOfFilms;
 
   // Get Services menu
   if (window.location.href.includes("/watchlist/")) {
@@ -13,15 +22,17 @@
     films = document.getElementsByClassName('js-list-entries poster-list -p125 -grid film-list')[0];
   }
 
+  numberOfFilms = films.childNodes.length;
+
   // Remove nodes which are not film nodes
-  for (var i = films.childNodes.length-1; i >= 0; i--) {
+  for (let i = numberOfFilms-1; i >= 0; i--) {
     var node = films.childNodes[i];
     if (!node.attributes) {
       films.removeChild(node);
     }
   }
 
-  var numberOfFilms = films.childNodes.length;
+  numberOfFilms = films.childNodes.length;
 
   // Create Services menu item to remove films
   if (numberOfFilms > 0) {
@@ -48,7 +59,7 @@
     var currentService;
 
     // Get available services from menu
-    for (var i = 8; i < servicesMenuItems.length - 2; i++) {
+    for (let i = 8; i < servicesMenuItems.length - 2; i++) {
       servicesList.push(servicesMenuItems[i].innerText);
       servicesUrls.push(servicesMenuItems[i].href);
       if (!servicesMenuItems[i].href) {
@@ -61,7 +72,7 @@
     // If a service is selected, remove films
     // which are available on other services
     if (currentService) {
-      for (var i = 0; i < servicesUrls.length; i++) {
+      for (let i = 0; i < servicesUrls.length; i++) {
         if (servicesUrls[i]) {
           removeFilms(servicesUrls[i], i);
         }
