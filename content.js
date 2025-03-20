@@ -114,10 +114,14 @@
 
       // Updated list header phrase with the number of films available only on the selected service
       if (numberOfFilms > 1) {
-        var numberOfFilmsPhrase = "The " + numberOfFilms + " films in this page are only available on " + currentService + " (<a href=\"\/settings\/stores\/\">edit&nbsp;favorites</a>)."
+        var numberOfFilmsPhrase = "The " + numberOfFilms + " films in this page are only available on ";
+      } else if (numberOfFilms == 1) {
+        var numberOfFilmsPhrase = "The film in this page is only available on ";
       } else {
-        var numberOfFilmsPhrase = "The film in this page is only available on " + currentService + " (<a href=\"\/settings\/stores\/\">edit&nbsp;favorites</a>)."
+        var numberOfFilmsPhrase = "No films in this page are only available on ";
       }
+      numberOfFilmsPhrase += currentService + " (<a href=\"\/settings\/stores\/\">edit&nbsp;favorites</a>)."
+
       document.getElementsByClassName('ui-block-heading')[0].innerHTML = numberOfFilmsPhrase;
 
       // Remove clickable property of menu item
