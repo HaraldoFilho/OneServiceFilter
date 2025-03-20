@@ -25,7 +25,12 @@
     films = document.getElementsByClassName('js-list-entries poster-list -p125 -grid film-list')[0];
   }
 
-  numberOfFilms = films.childNodes.length;
+  // If there are no films on the list for the selected service, end the script
+  try {
+    numberOfFilms = films.childNodes.length;
+  } catch {
+    return;
+  }
 
   // Remove nodes which are not film nodes
   for (let i = numberOfFilms-1; i >= 0; i--) {
