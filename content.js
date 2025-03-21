@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------*\
   Author: Haraldo Filho
-  Date: Mar 19, 2025
+  Date: Mar 21, 2025
   Project name: One Service Filter for Letterboxd
   Description: Filter to show, in a Letterboxd list or watchlist,
     only the films available on the selected streaming service.
@@ -8,6 +8,19 @@
 
 (function () {
   "use strict";
+
+  var pageUrl = window.location.href
+  console.log("Page url:" + pageUrl);
+
+  // Checks if the current page is the watchlist
+  if (!pageUrl.includes("/on/") || pageUrl.includes("/no-services/")
+    || pageUrl.includes("/favorite-services/") || pageUrl.includes("/films/")) {
+    localStorage.setItem("lastService", "");
+    console.log("Menu item not loaded, page url is invalid.")
+    return;
+  }
+
+  console.log("Menu item loaded, page url is valid.")
 
   // If user is not logged in, do not load menu item
   if (!document.body.getAttributeNode('class').value.includes("logged-in")) {return}
@@ -57,25 +70,36 @@
     servicesMenu.insertBefore(newItem, servicesMenu.children[3]);
   }
 
+  var servicesMenuItems = document.getElementById('services-menu').getElementsByClassName('item');
+  var servicesList = [];
+  var servicesUrls = [];
+  var currentService;
+
+  // Get available services from menu
+  for (let i = 8; i < servicesMenuItems.length - 2; i++) {
+    servicesList.push(servicesMenuItems[i].innerText);
+    servicesUrls.push(servicesMenuItems[i].href);
+    if (!servicesMenuItems[i].href) {
+      currentService = servicesMenuItems[i].innerText;
+    }
+  }
+
+  var lastService = localStorage.getItem("lastService");
+
+  console.log("Last Service: " + lastService);
+  console.log("Current Service: " + currentService);
+
+  if (currentService == lastService) {
+    processPage();
+  } else {
+    localStorage.setItem("lastService", "");
+  }
+
   function processPage() {
 
+    localStorage.setItem("lastService", currentService);
+
     newItem.setAttribute('class', ' smenu-subselected');
-
-    var servicesMenuItems = document.getElementById('services-menu').getElementsByClassName('item');
-    var servicesList = [];
-    var servicesUrls = [];
-    var currentService;
-
-    // Get available services from menu
-    for (let i = 8; i < servicesMenuItems.length - 2; i++) {
-      servicesList.push(servicesMenuItems[i].innerText);
-      servicesUrls.push(servicesMenuItems[i].href);
-      if (!servicesMenuItems[i].href) {
-        currentService = servicesMenuItems[i].innerText;
-      }
-    }
-
-    console.log("Current Service: " + currentService);
 
     // If a service is selected, remove films
     // which are available on other services
